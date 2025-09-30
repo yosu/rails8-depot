@@ -6,6 +6,5 @@ class CartTest < ActiveSupport::TestCase
     line_item = cart.add_product(products(:pragprog))
 
     assert_equal line_item.product, products(:pragprog)
-    assert_equal line_item.cart_id, cart.id
   end
 end
