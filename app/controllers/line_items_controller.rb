@@ -1,6 +1,6 @@
 class LineItemsController < ApplicationController
   include CurrentCart
-  before_action :set_cart, only: %i[ create ]
+  before_action :set_cart, only: %i[ create decrement ]
   before_action :set_line_item, only: %i[ show edit update destroy decrement]
 
   # GET /line_items or /line_items.json
@@ -69,6 +69,7 @@ class LineItemsController < ApplicationController
         @line_item.quantity = new_quantity
 
         if @line_item.save
+          format.turbo_stream { @current_item = @line_item }
           format.html { redirect_to store_index_path }
           format.json { render :show, status: ok, location: @line_item }
         else
@@ -80,6 +81,7 @@ class LineItemsController < ApplicationController
       @line_item.destroy!
 
       respond_to do |format|
+        format.turbo_stream
         format.html { redirect_to store_index_path, notice: "Line item was successfully destroyed.", status: :see_other }
         format.json { head :no_content }
       end
