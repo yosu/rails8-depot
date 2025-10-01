@@ -6,6 +6,7 @@ one:
   price: 99.99
 
 two:
-  product: two
+  product: pragprog
   cart: two
+  order: one
   price: 99.99
