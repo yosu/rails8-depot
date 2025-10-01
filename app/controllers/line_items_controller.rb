@@ -1,7 +1,7 @@
 class LineItemsController < ApplicationController
   include CurrentCart
   before_action :set_cart, only: %i[ create ]
-  before_action :set_line_item, only: %i[ show edit update destroy ]
+  before_action :set_line_item, only: %i[ show edit update destroy decrement]
 
   # GET /line_items or /line_items.json
   def index
@@ -61,6 +61,31 @@ class LineItemsController < ApplicationController
     end
   end
 
+  def decrement
+    new_quantity = @line_item.quantity - 1
+
+    if new_quantity > 0
+      respond_to do |format|
+        @line_item.quantity = new_quantity
+
+        if @line_item.save
+          format.html { redirect_to store_index_path }
+          format.json { render :show, status: ok, location: @line_item }
+        else
+          format.html { render :edit, status: :unprocessable_entry }
+          format.json { render json: @line_item.errors, status: :unprocessable_entry }
+        end
+      end
+    else
+      @line_item.destroy!
+
+      respond_to do |format|
+        format.html { redirect_to store_index_path, notice: "Line item was successfully destroyed.", status: :see_other }
+        format.json { head :no_content }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_line_item
@@ -69,6 +94,6 @@ class LineItemsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def line_item_params
-      params.expect(line_item: [ :product_id ])
+      params.expect(line_item: [ :product_id, :quantity ])
     end
 end

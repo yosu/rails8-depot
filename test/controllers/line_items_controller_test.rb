@@ -24,6 +24,7 @@ class LineItemsControllerTest < ActionDispatch::IntegrationTest
 
     assert_select "h2", "Your Cart"
     assert_select "td", "The Pragmatic Programmer"
+    assert_select "td.quantity", "1"
   end
 
   test "should create line_item via turbo-stream" do
@@ -47,8 +48,12 @@ class LineItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update line_item" do
-    patch line_item_url(@line_item), params: { line_item: { product_id: @line_item.product_id } }
+    patch line_item_url(@line_item), params: { line_item: { product_id: @line_item.product_id, quantity: 3 } }
     assert_redirected_to line_item_url(@line_item)
+
+    follow_redirect!
+
+    assert_select "td.quantity", "3"
   end
 
   test "should destroy line_item" do
@@ -57,5 +62,32 @@ class LineItemsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to line_items_url
+  end
+
+  test "should destroy line_item through decrement" do
+    assert_difference("LineItem.count", -1) do
+      post decrement_line_item_url(@line_item)
+    end
+
+    assert_redirected_to store_index_url
+  end
+
+  test "should decrement line_item" do
+    patch line_item_url(@line_item), params: { line_item: { product_id: @line_item.product_id, quantity: "3" } }
+    assert_redirected_to line_item_url(@line_item)
+
+    follow_redirect!
+
+    assert_select "td.quantity", "3"
+
+    assert_difference("LineItem.count", 0) do
+      post decrement_line_item_url(@line_item)
+    end
+
+    assert_redirected_to store_index_path
+
+    get line_item_url(@line_item)
+
+    assert_select "td.quantity", "2"
   end
 end

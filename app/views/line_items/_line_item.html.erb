@@ -3,7 +3,7 @@
 <% else %>
 <tr>
 <% end %>
-  <td class="text-right"><%= line_item.quantity %></td>
+  <td class="quantity text-right"><%= line_item.quantity %></td>
   <td>&times;</td>
   <td class="pr-2">
     <%= line_item.product.title %>
@@ -12,8 +12,8 @@
     <%= number_to_currency(line_item.total_price) %>
   </td>
   <td>
-    <%= button_to "Delete items", line_item, method: :delete,
-      class: 'ml-4 rounded py-1 px-2 text-white bg-red-600'
+    <%= button_to "Decrement items", decrement_line_item_path(line_item.id), method: "post",
+      class: 'ml-4 rounded py-1 px-2 text-white bg-green-600'
      %>
   </td>
 </tr>
