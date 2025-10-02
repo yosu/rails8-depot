@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get "admin" => "admin#index"
+  resources :users
+  resource :session
+  resources :passwords, param: :token
   resources :orders do
     post "ship", on: :member
   end
