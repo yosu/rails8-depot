@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   include CurrentCart
   before_action :set_cart, only: %i[ new create ]
   before_action :ensure_cart_isnt_empty, only: %i[ new ]
-  before_action :set_order, only: %i[ show edit update destroy ]
+  before_action :set_order, only: %i[ show edit update destroy ship ]
 
   # GET /orders or /orders.json
   def index
@@ -64,6 +64,14 @@ class OrdersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to orders_path, notice: "Order was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
+    end
+  end
+
+  def ship
+    @order.ship!(Date.today)
+
+    respond_to do |format|
+      format.html { redirect_to orders_path, notice: "Order was successfully shipped." }
     end
   end
 

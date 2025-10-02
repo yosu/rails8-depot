@@ -51,4 +51,10 @@ class Order < ApplicationRecord
       raise payment_result.error
     end
   end
+
+  def ship!(ship_date)
+    update!(ship_date: ship_date)
+
+    OrderMailer.shipped(self).deliver_later
+  end
 end

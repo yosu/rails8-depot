@@ -81,4 +81,47 @@ class OrdersTest < ApplicationSystemTestCase
     assert_equal "Sam Ruby <depot@example.com>", mail[:from].value
     assert_equal "Pragmatic Store Order Confirmation", mail.subject
   end
+
+  test "check ship order" do
+    LineItem.delete_all
+    Order.delete_all
+
+    visit store_index_url
+
+    click_on "Add to Cart", match: :first
+
+    click_on "Checkout"
+
+    fill_in "Name", with: "Dave Thomas"
+    fill_in "Address", with: "123 Main Street"
+    fill_in "Email", with: "dave@example.com"
+
+    select "Check", from: "Pay type"
+    fill_in "Routing number", with: "123456"
+    fill_in "Account number", with: "987654"
+
+    click_button "Place Order"
+    assert_text "Thank you for your order"
+
+    perform_enqueued_jobs
+    perform_enqueued_jobs
+    assert_performed_jobs 2
+
+    orders = Order.all
+    assert_equal 1, orders.size
+
+    order = orders.first
+
+    visit order_url(order)
+
+    assert_text "Showing order"
+
+    click_on "Ship this order"
+
+    assert_text "Order was successfully shipped."
+
+    visit order_url(order)
+
+    assert_text Date.today.to_s
+  end
 end

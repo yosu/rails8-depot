@@ -12,3 +12,7 @@
     <%= render partial: 'line_items/line_item', locals: { line_item: line_item, context: :mailer } -%>
   <% end %>
 </table>
+
+<p>
+  Shipped date: <%= @order.ship_date %>
+</p>
