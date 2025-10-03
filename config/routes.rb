@@ -3,16 +3,19 @@ Rails.application.routes.draw do
   resources :users
   resource :session
   resources :passwords, param: :token
-  resources :orders do
-    post "ship", on: :member
-  end
-  resources :line_items do
-    post "decrement", on: :member
-  end
-
-  resources :carts
-  root "store#index", as: "store_index"
   resources :products
+
+  scope "(:locale)" do
+    resources :orders do
+      post "ship", on: :member
+    end
+    resources :line_items do
+      post "decrement", on: :member
+    end
+
+    resources :carts
+    root "store#index", as: "store_index", via: :all
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

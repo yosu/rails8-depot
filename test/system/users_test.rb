@@ -23,6 +23,8 @@ class UsersTest < ApplicationSystemTestCase
     visit users_url
     click_on "New user"
 
+    assert_text "User"
+
     fill_in "Email address", with: "test@example.com"
     fill_in "Name", with: "Test User"
     fill_in "Password", with: "secret"
@@ -35,6 +37,8 @@ class UsersTest < ApplicationSystemTestCase
   test "should update User" do
     visit user_url(@user)
     click_on "Edit this user", match: :first
+
+    assert_text "User"
 
     fill_in "Email address", with: "update@example.com"
     fill_in "Name", with: "Updated User"

@@ -1,5 +1,5 @@
 <div id="<%= dom_id cart %>" class="w-full sm:w-auto my-5 space-y-5">
-  <h2 class="font-bold text-lg mb-3">Your Cart</h2>
+  <h2 class="font-bold text-lg mb-3"><%= t(".title") %></h2>
 
   <table class="table-auto">
     <% cart.line_items.each do |item| %>
@@ -17,11 +17,11 @@
 
   </table>
   <div class="flex mt-1">
-    <%= button_to "Empty Cart", cart, method: :delete,
+    <%= button_to t(".empty"), cart, method: :delete,
       class: 'ml-4 rounded py-1 px-2 text-white bg-green-600 cursor-pointer'
      %>
 
-    <%= button_to "Checkout", new_order_path, method: :get,
+    <%= button_to t(".checkout"), new_order_path, method: :get,
       class: ["ml-4 rounded py-1 px-2 text-black",
         {"bg-green-200 cursor-pointer": @order.nil?},
         {"bg-gray-200 text-gray-600": (not @order.nil?)} ],
