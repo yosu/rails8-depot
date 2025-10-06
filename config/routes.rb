@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
   resources :products
 
+  resources :support_requests, only: %i[ index update ]
+
   scope "(:locale)" do
     resources :orders do
       post "ship", on: :member
