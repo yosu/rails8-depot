@@ -43,6 +43,7 @@ class OrdersTest < ApplicationSystemTestCase
 
   test "check order and delivery" do
     LineItem.delete_all
+    SupportRequest.delete_all
     Order.delete_all
 
     visit store_index_url
@@ -84,6 +85,7 @@ class OrdersTest < ApplicationSystemTestCase
 
   test "check ship order" do
     LineItem.delete_all
+    SupportRequest.delete_all
     Order.delete_all
 
     visit store_index_url
